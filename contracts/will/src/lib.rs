@@ -4573,6 +4573,9 @@ impl WillContract {
         let digest = env.crypto().sha256(&preimage);
         let digest_bytes = Bytes::from_array(&env, &digest.to_array());
 
+        // A different salt yields a different digest, which matches no commitment,
+        // and the `claimed` flag below blocks a second claim with the same
+        // pre-image, so a modified salt cannot claim a slot twice (#633).
         // Find the matching hashed beneficiary slot.
         let mut found_idx: Option<u32> = None;
         for (i, hb) in will.hashed_beneficiaries.iter().enumerate() {
