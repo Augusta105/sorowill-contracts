@@ -1864,6 +1864,8 @@ impl WillContract {
         }
 
         let now = env.ledger().timestamp();
+        // Every vote cast under the old guardian list is cleared here, before the
+        // new threshold takes effect, so no stale vote can count toward it (#631).
         storage::reset_guardian_votes(&env, &will);
         storage::reset_guardian_cancel_votes(&env, &will);
         let mut guardian_structs: Vec<Guardian> = Vec::new(&env);
