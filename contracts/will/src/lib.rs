@@ -1508,6 +1508,8 @@ impl WillContract {
     ) {
         owner.require_auth();
         let mut will = load_owned(&env, will_id, &owner);
+        // Only an Active will can change its beneficiaries. Once triggered the
+        // list is frozen, so distribution pays the list the owner last set (#632).
         assert_status(&env, &will, WillStatus::Active, WillError::WillNotActive);
 
         assert_beneficiary_count(&env, &beneficiaries);
